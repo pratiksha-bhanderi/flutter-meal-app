@@ -1,0 +1,23 @@
+[
+  {
+    "name": "Double Burger Combo",
+    "price": "$15.99",
+    "oldPrice": "$22.00",
+    "image": "assets/images/meals/burger.png",
+    "off": "30% OFF"
+  },
+  {
+    "name": "Family Pizza Party",
+    "price": "$25.00",
+    "oldPrice": "$35.00",
+    "image": "assets/images/meals/pizza.png",
+    "off": "25% OFF"
+  },
+  {
+    "name": "Dessert Delight",
+    "price": "$10.00",
+    "oldPrice": "$14.00",
+    "image": "assets/images/meals/dessert.png",
+    "off": "40% OFF"
+  }
+]
