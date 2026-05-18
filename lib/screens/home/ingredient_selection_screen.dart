@@ -33,7 +33,6 @@ class _BurgerLayer extends StatefulWidget {
   final double height;
 
   const _BurgerLayer({
-    super.key,
     required this.imagePath,
     required this.name,
     required this.width,
@@ -266,9 +265,9 @@ class _OrganicLayer extends StatelessWidget {
     final bool isPickle = label.contains('pickle');
 
     int pieces = 3;
-    if (isLettuce || isCheese || isTomato)
+    if (isLettuce || isCheese || isTomato) {
       pieces = 1; // Tomato asset already has multiple slices
-    else if (isPickle)
+    } else if (isPickle)
       pieces = 3;
     else if (isOnion)
       pieces = 4;
@@ -295,8 +294,9 @@ class _OrganicLayer extends StatelessWidget {
               if (isLettuce) sliceW = width * 1.1;
               if (isCheese) sliceW = width * 0.85;
               if (isPickle) sliceW = width * 0.35;
-              if (isTomato)
+              if (isTomato) {
                 sliceW = width * 1.2; // Show the full photographic asset
+              }
 
               return Positioned(
                 left: (width / 2 - sliceW / 2) + math.cos(angle) * dist,
@@ -447,10 +447,11 @@ class _LeafyClipper extends CustomClipper<Path> {
           centerX + (radius + wave * math.sin(i * 0.1)) * math.cos(angle);
       final double y =
           centerY + (radius + wave * math.sin(i * 0.1)) * math.sin(angle);
-      if (i == 0)
+      if (i == 0) {
         path.moveTo(x, y);
-      else
+      } else {
         path.lineTo(x, y);
+      }
     }
     path.close();
     return path;
@@ -1038,7 +1039,7 @@ class _IngredientSelectionScreenState extends State<IngredientSelectionScreen> {
               padding: EdgeInsets.symmetric(horizontal: context.w(24)),
               scrollDirection: Axis.horizontal,
               itemCount: _availableIngredients.length,
-              separatorBuilder: (_, __) => SizedBox(width: context.w(16)),
+              separatorBuilder: (_, _) => SizedBox(width: context.w(16)),
               itemBuilder: (context, index) {
                 final ingredient = _availableIngredients[index];
                 final bool isActive = _activeIngredientPaths.contains(
@@ -1076,7 +1077,7 @@ class _IngredientSelectionScreenState extends State<IngredientSelectionScreen> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Container(
+                        SizedBox(
                           width: context.w(45),
                           height: context.w(45),
                           child: ClipOval(

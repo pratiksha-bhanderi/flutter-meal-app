@@ -245,7 +245,7 @@ class _HomeScreenState extends State<HomeScreen>
                   ),
                 ),
 
-                // Promo banner
+                // Promo and Flash Sale
                 SliverToBoxAdapter(
                   child: Padding(
                     padding: EdgeInsets.fromLTRB(
@@ -254,182 +254,197 @@ class _HomeScreenState extends State<HomeScreen>
                       context.w(24),
                       0,
                     ),
-                    child: Container(
-                      height: context.h(170),
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [
-                            AppColors.deepOrangeGradient,
-                            AppColors.secondaryOrange,
-                          ],
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
-                        ),
-                        borderRadius: BorderRadius.circular(22),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.primaryOrange.withOpacity(0.35),
-                            blurRadius: 20,
-                            offset: const Offset(0, 8),
-                          ),
-                        ],
-                      ),
-                      child: Stack(
-                        children: [
-                          Positioned(
-                            right: -20,
-                            top: -20,
-                            child: Container(
-                              width: context.w(130),
-                              height: context.h(130),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.white.withOpacity(0.08),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: context.w(20),
-                              vertical: context.h(18),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: context.w(10),
-                                    vertical: context.h(3),
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(0.2),
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: Text(
-                                    '🔥 Today\'s special',
-                                    style: AppTextStyles.font(
-                                      context,
-                                      color: Colors.white,
-                                      fontSize: 11,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(height: context.h(8)),
-                                Text(
-                                  'Up to 30% off\non your first order!',
-                                  style: AppTextStyles.font(
-                                    context,
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w700,
-                                    height: 1.25,
-                                  ),
-                                ),
-                                SizedBox(height: context.h(10)),
-                                Container(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: context.w(14),
-                                    vertical: context.h(7),
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Text(
-                                    'Order Now',
-                                    style: AppTextStyles.font(
-                                      context,
-                                      color: AppColors.primaryOrange,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                ),
+                    child: Builder(
+                      builder: (context) {
+                        final promoBanner = Container(
+                          height: context.h(170),
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [
+                                AppColors.deepOrangeGradient,
+                                AppColors.secondaryOrange,
                               ],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
                             ),
+                            borderRadius: BorderRadius.circular(22),
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColors.primaryOrange.withOpacity(0.35),
+                                blurRadius: 20,
+                                offset: const Offset(0, 8),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+                          child: Stack(
+                            children: [
+                              Positioned(
+                                right: -20,
+                                top: -20,
+                                child: Container(
+                                  width: context.w(130),
+                                  height: context.h(130),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.white.withOpacity(0.08),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: context.w(20),
+                                  vertical: context.h(18),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: context.w(10),
+                                        vertical: context.h(3),
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white.withOpacity(0.2),
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      child: Text(
+                                        '🔥 Today\'s special',
+                                        style: AppTextStyles.font(
+                                          context,
+                                          color: Colors.white,
+                                          fontSize: 11,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: context.h(8)),
+                                    Text(
+                                      'Up to 30% off\non your first order!',
+                                      style: AppTextStyles.font(
+                                        context,
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w700,
+                                        height: 1.25,
+                                      ),
+                                    ),
+                                    SizedBox(height: context.h(10)),
+                                    Container(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: context.w(14),
+                                        vertical: context.h(7),
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Text(
+                                        'Order Now',
+                                        style: AppTextStyles.font(
+                                          context,
+                                          color: AppColors.primaryOrange,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
 
-                // Flash Sale Banner (Timer)
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(
-                      context.w(24),
-                      context.h(16),
-                      context.w(24),
-                      0,
-                    ),
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: context.w(20),
-                        vertical: context.h(16),
-                      ),
-                      decoration: BoxDecoration(
-                        color: cs.primary.withOpacity(0.05),
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: cs.primary.withOpacity(0.1)),
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.timer_outlined,
-                            color: cs.primary,
-                            size: context.sp(24),
+                        final flashSaleBanner = Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: context.w(20),
+                            vertical: context.h(16),
                           ),
-                          SizedBox(width: context.w(12)),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Flash Sale ends in:',
-                                  style: AppTextStyles.font(
-                                    context,
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w600,
-                                    color: cs.onSurface.withOpacity(0.6),
-                                  ),
+                          decoration: BoxDecoration(
+                            color: cs.primary.withOpacity(0.05),
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(color: cs.primary.withOpacity(0.1)),
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.timer_outlined,
+                                color: cs.primary,
+                                size: context.sp(24),
+                              ),
+                              SizedBox(width: context.w(12)),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Flash Sale ends in:',
+                                      style: AppTextStyles.font(
+                                        context,
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w600,
+                                        color: cs.onSurface.withOpacity(0.6),
+                                      ),
+                                    ),
+                                    Text(
+                                      _formatDuration(_remainingTime),
+                                      style: AppTextStyles.font(
+                                        context,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w800,
+                                        color: cs.primary,
+                                        letterSpacing: 1.5,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                Text(
-                                  _formatDuration(_remainingTime),
+                              ),
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: context.w(12),
+                                  vertical: context.h(8),
+                                ),
+                                decoration: BoxDecoration(
+                                  color: cs.primary,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Text(
+                                  'GRAB NOW',
                                   style: AppTextStyles.font(
                                     context,
-                                    fontSize: 20,
+                                    fontSize: 11,
                                     fontWeight: FontWeight.w800,
-                                    color: cs.primary,
-                                    letterSpacing: 1.5,
+                                    color: Colors.white,
                                   ),
                                 ),
+                              ),
+                            ],
+                          ),
+                        );
+
+                        if (context.isDesktop) {
+                          return IntrinsicHeight(
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Expanded(flex: 5, child: promoBanner),
+                                SizedBox(width: context.w(16)),
+                                Expanded(flex: 4, child: flashSaleBanner),
                               ],
                             ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: context.w(12),
-                              vertical: context.h(8),
-                            ),
-                            decoration: BoxDecoration(
-                              color: cs.primary,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Text(
-                              'GRAB NOW',
-                              style: AppTextStyles.font(
-                                context,
-                                fontSize: 11,
-                                fontWeight: FontWeight.w800,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                          );
+                        } else {
+                          return Column(
+                            children: [
+                              promoBanner,
+                              SizedBox(height: context.h(16)),
+                              flashSaleBanner,
+                            ],
+                          );
+                        }
+                      },
                     ),
                   ),
                 ),
@@ -646,7 +661,7 @@ class _HomeScreenState extends State<HomeScreen>
                   ), // Optimized bottom padding for floating bar
                   sliver: SliverGrid(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
+                      crossAxisCount: context.isDesktop ? 4 : 2,
                       crossAxisSpacing: context.w(14),
                       mainAxisSpacing: context.h(14),
                       childAspectRatio: 0.78,

@@ -44,17 +44,22 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
         title: Text('Payment Methods', style: AppTextStyles.font(context, fontSize: 20, fontWeight: FontWeight.w700)),
         centerTitle: true,
       ),
-      body: ListView(
-        padding: EdgeInsets.all(context.w(24)),
-        children: [
-          _cardItem(context, 'MasterCard', '**** **** **** 4589', Icons.credit_card_rounded, isDark),
-          SizedBox(height: context.h(16)),
-          _cardItem(context, 'Visa Card', '**** **** **** 1234', Icons.credit_card_rounded, isDark),
-          SizedBox(height: context.h(16)),
-          _walletItem(context, 'Apple Pay', 'Connected', Icons.apple_rounded, isDark),
-          SizedBox(height: context.h(32)),
-          _addButton(context, 'Add New Payment Method'),
-        ],
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 800),
+          child: ListView(
+            padding: EdgeInsets.all(context.w(24)),
+            children: [
+              _cardItem(context, 'MasterCard', '**** **** **** 4589', Icons.credit_card_rounded, isDark),
+              SizedBox(height: context.h(16)),
+              _cardItem(context, 'Visa Card', '**** **** **** 1234', Icons.credit_card_rounded, isDark),
+              SizedBox(height: context.h(16)),
+              _walletItem(context, 'Apple Pay', 'Connected', Icons.apple_rounded, isDark),
+              SizedBox(height: context.h(32)),
+              _addButton(context, 'Add New Payment Method'),
+            ],
+          ),
+        ),
       ),
     );
   }

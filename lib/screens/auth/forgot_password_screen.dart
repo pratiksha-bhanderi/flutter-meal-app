@@ -56,12 +56,17 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.all(context.w(24)),
-          child: _emailSent
-              ? _buildSuccessView(context, cs)
-              : _buildFormView(context, cs),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 450),
+          child: SafeArea(
+            child: Padding(
+              padding: EdgeInsets.all(context.w(24)),
+              child: _emailSent
+                  ? _buildSuccessView(context, cs)
+                  : _buildFormView(context, cs),
+            ),
+          ),
         ),
       ),
     );
@@ -71,10 +76,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     return Form(
       key: _formKey,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            'Forgot Password? 🔑',
+            'Forgot Password?',
+            textAlign: TextAlign.center,
             style: AppTextStyles.font(
               context,
               fontSize: 28,
@@ -84,6 +91,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           SizedBox(height: context.h(12)),
           Text(
             'Don\'t worry! It happens. Please enter the email address associated with your account.',
+            textAlign: TextAlign.center,
             style: AppTextStyles.font(
               context,
               fontSize: 14,
@@ -91,12 +99,15 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             ),
           ),
           SizedBox(height: context.h(40)),
-          Text(
-            'Email Address',
-            style: AppTextStyles.font(
-              context,
-              fontSize: 13,
-              fontWeight: FontWeight.w600,
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              'Email Address',
+              style: AppTextStyles.font(
+                context,
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
           SizedBox(height: context.h(8)),
@@ -128,7 +139,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               ),
             ),
           ),
-          const Spacer(),
+          SizedBox(height: context.h(48)),
           SizedBox(
             width: double.infinity,
             height: context.h(56),

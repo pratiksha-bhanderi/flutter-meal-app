@@ -9,7 +9,7 @@ void main() {
   });
 
   group('ThemeProvider', () {
-    Future<ThemeProvider> _buildProvider() async {
+    Future<ThemeProvider> buildProvider() async {
       final provider = ThemeProvider();
       // Allow _loadTheme() async call to complete
       await Future.delayed(const Duration(milliseconds: 50));
@@ -18,7 +18,7 @@ void main() {
 
     // ── Default state ────────────────────────────────────────────────────────
     test('defaults to dark theme when no preference saved', () async {
-      final provider = await _buildProvider();
+      final provider = await buildProvider();
 
       expect(provider.themeMode, ThemeMode.dark);
     });
@@ -26,16 +26,16 @@ void main() {
     // ── setDark ──────────────────────────────────────────────────────────────
     group('setDark', () {
       test('setDark(false) switches to light theme', () async {
-        final provider = await _buildProvider();
+        final provider = await buildProvider();
         await provider.setDark(false);
 
         expect(provider.themeMode, ThemeMode.light);
       });
 
       test('setDark(true) switches to dark theme', () async {
-        final provider = await _buildProvider();
+        final provider = await buildProvider();
         await provider.setDark(false); // go light first
-        await provider.setDark(true);  // back to dark
+        await provider.setDark(true); // back to dark
 
         expect(provider.themeMode, ThemeMode.dark);
       });
@@ -44,21 +44,21 @@ void main() {
     // ── Persistence ──────────────────────────────────────────────────────────
     test('persists light theme preference across provider instances', () async {
       // First instance: switch to light and save
-      final provider1 = await _buildProvider();
+      final provider1 = await buildProvider();
       await provider1.setDark(false);
 
       // Second instance: should load the saved light preference
-      final provider2 = await _buildProvider();
+      final provider2 = await buildProvider();
       expect(provider2.themeMode, ThemeMode.light);
     });
 
     test('persists dark theme preference across provider instances', () async {
       // First instance: explicitly set dark
-      final provider1 = await _buildProvider();
+      final provider1 = await buildProvider();
       await provider1.setDark(true);
 
       // Second instance: should load the saved dark preference
-      final provider2 = await _buildProvider();
+      final provider2 = await buildProvider();
       expect(provider2.themeMode, ThemeMode.dark);
     });
 

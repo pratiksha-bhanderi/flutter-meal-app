@@ -80,84 +80,87 @@ class _RegisterScreenState extends State<RegisterScreen>
         backgroundColor: cs.surface,
         body: SafeArea(
           child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.075),
-            child: FadeTransition(
-              opacity: _fadeAnim,
-              child: SlideTransition(
-                position: _slideAnim,
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: screenWidth * 0.05),
+            padding: EdgeInsets.symmetric(horizontal: context.w(24), vertical: context.h(24)),
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 450),
+                child: FadeTransition(
+                  opacity: _fadeAnim,
+                  child: SlideTransition(
+                    position: _slideAnim,
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: context.h(20)),
 
-                      // Back button
-                      GestureDetector(
-                        onTap: () => Navigator.of(context).pop(),
-                        child: Container(
-                          width: screenWidth * 0.11,
-                          height: screenWidth * 0.11,
-                          decoration: BoxDecoration(
-                            color: cs.surface,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(
-                                color: cs.outline, width: 1),
-                          ),
-                          child: Icon(
-                            Icons.arrow_back_ios_new_rounded,
-                            size: screenWidth * 0.045,
-                            color: cs.onSurface,
-                          ),
-                        ),
-                      ),
-
-                      SizedBox(height: size.height * 0.03),
-
-                      // Logo
-                      Center(
-                        child: Container(
-                          width: screenWidth * 0.2,
-                          height: screenWidth * 0.2,
-                          constraints: const BoxConstraints(maxWidth: 100, maxHeight: 100),
-                          decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              colors: [AppColors.primaryOrange, AppColors.secondaryOrange],
-                            ),
-                            borderRadius: BorderRadius.circular(screenWidth * 0.05),
-                            boxShadow: [
-                              BoxShadow(
-                                color: cs.primary.withValues(alpha: 0.35),
-                                blurRadius: 20,
-                                offset: const Offset(0, 8),
+                          // Back button
+                          GestureDetector(
+                            onTap: () => Navigator.of(context).pop(),
+                            child: Container(
+                              width: context.w(44),
+                              height: context.w(44),
+                              decoration: BoxDecoration(
+                                color: cs.surface,
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                    color: cs.outline, width: 1),
                               ),
-                            ],
+                              child: Icon(
+                                Icons.arrow_back_ios_new_rounded,
+                                size: context.sp(18),
+                                color: cs.onSurface,
+                              ),
+                            ),
                           ),
-                          child: Icon(
-                            Icons.person_add_rounded,
-                            color: Colors.white,
-                            size: screenWidth * 0.1,
+
+                          SizedBox(height: context.h(24)),
+
+                          // Logo
+                          Center(
+                            child: Container(
+                              width: context.w(80),
+                              height: context.w(80),
+                              constraints: const BoxConstraints(maxWidth: 100, maxHeight: 100),
+                              decoration: BoxDecoration(
+                                gradient: const LinearGradient(
+                                  colors: [AppColors.primaryOrange, AppColors.secondaryOrange],
+                                ),
+                                borderRadius: BorderRadius.circular(context.w(20)),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: cs.primary.withValues(alpha: 0.35),
+                                    blurRadius: 20,
+                                    offset: const Offset(0, 8),
+                                  ),
+                                ],
+                              ),
+                              child: Icon(
+                                Icons.person_add_rounded,
+                                color: Colors.white,
+                                size: context.sp(40),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
 
-                      SizedBox(height: size.height * 0.04),
+                          SizedBox(height: context.h(36)),
 
-                      Text(
-                        'Create Account 🍽️',
-                        style: AppTextStyles.font(context, 
-                          fontSize: screenWidth * 0.075,
-                          fontWeight: FontWeight.w700,
-                          color: cs.onSurface,
-                        ),
-                      ),
-                      SizedBox(height: context.h(6)),
-                      Text(
-                        'Join us and discover amazing meals',
-                        style: AppTextStyles.font(context, 
-                            fontSize: 14,
-                            color: cs.onSurface.withValues(alpha: 0.55)),
-                      ),
+                          Text(
+                            'Create Account 🍽️',
+                            style: AppTextStyles.font(context, 
+                              fontSize: context.sp(30),
+                              fontWeight: FontWeight.w700,
+                              color: cs.onSurface,
+                            ),
+                          ),
+                          SizedBox(height: context.h(6)),
+                          Text(
+                            'Join us and discover amazing meals',
+                            style: AppTextStyles.font(context, 
+                                fontSize: context.sp(14),
+                                color: cs.onSurface.withValues(alpha: 0.55)),
+                          ),
 
                       SizedBox(height: context.h(36)),
 
@@ -316,6 +319,8 @@ class _RegisterScreenState extends State<RegisterScreen>
               ),
             ),
           ),
+        ),
+      ),
         ),
       ),
     );

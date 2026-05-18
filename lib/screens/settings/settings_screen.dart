@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:meal_app/core/theme/app_styles.dart';
 import 'package:provider/provider.dart';
 import 'package:meal_app/core/providers/theme_provider.dart';
-import 'package:meal_app/core/services/auth_service.dart';
 import 'package:meal_app/core/utils/responsive_util.dart';
 import 'package:meal_app/router/app_router.dart';
 
@@ -24,21 +23,23 @@ class SettingsScreen extends StatelessWidget {
           backgroundColor: cs.surface,
           elevation: 0,
           surfaceTintColor: Colors.transparent,
-          leading: showBackButton ? GestureDetector(
-            onTap: () => Navigator.of(context).pop(),
-            child: Container(
-              margin: EdgeInsets.all(context.w(10)),
-              decoration: BoxDecoration(
-                color: cs.onSurface.withValues(alpha: 0.06),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Icon(
-                Icons.arrow_back_ios_new_rounded,
-                size: context.sp(16),
-                color: cs.onSurface,
-              ),
-            ),
-          ) : null,
+          leading: showBackButton
+              ? GestureDetector(
+                  onTap: () => Navigator.of(context).pop(),
+                  child: Container(
+                    margin: EdgeInsets.all(context.w(10)),
+                    decoration: BoxDecoration(
+                      color: cs.onSurface.withValues(alpha: 0.06),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Icon(
+                      Icons.arrow_back_ios_new_rounded,
+                      size: context.sp(16),
+                      color: cs.onSurface,
+                    ),
+                  ),
+                )
+              : null,
           automaticallyImplyLeading: false,
           title: Text(
             'Settings',

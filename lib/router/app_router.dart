@@ -24,10 +24,6 @@ import 'package:meal_app/screens/settings/change_password_screen.dart';
 import 'package:meal_app/screens/auth/forgot_password_screen.dart';
 import 'package:meal_app/screens/auth/email_verification_screen.dart';
 import 'package:meal_app/screens/settings/notifications_screen.dart';
-
-
-
-
 import 'package:meal_app/screens/analytics/analytics_screen.dart';
 import 'package:meal_app/screens/meal_plan/meal_plan_screen.dart';
 
@@ -37,13 +33,16 @@ class AppRouter {
   static const String login = '/login';
   static const String register = '/register';
   static const String home = '/home';
+  static const String explore = '/explore';
+  static const String favourites = '/favourites';
+  static const String cart = '/cart';
   static const String settings = '/settings';
-  static const String explorer = '/explorer';
+  static const String explorer =
+      '/explorer'; // Keep this for category filtered explorer if needed
   static const String mealDetail = '/mealDetail';
   static const String ingredientSelection = '/ingredientSelection';
   static const String checkout = '/checkout';
   static const String orderTracking = '/orderTracking';
-  static const String cart = '/cart';
   static const String profile = '/profile';
   static const String orderHistory = '/orderHistory';
   static const String addresses = '/addresses';
@@ -56,10 +55,6 @@ class AppRouter {
   static const String forgotPassword = '/forgotPassword';
   static const String emailVerification = '/emailVerification';
   static const String notifications = '/notifications';
-
-
-
-
   static const String analytics = '/analytics';
   static const String mealPlan = '/mealPlan';
 
@@ -74,9 +69,20 @@ class AppRouter {
       case register:
         return _slideRoute(const RegisterScreen(), settings);
       case home:
-        return _authGuardedRoute(const MainScreen(), settings);
+      case explore:
+      case favourites:
+      case cart:
       case AppRouter.settings:
-        return _slideRoute(const SettingsScreen(), settings);
+        int index = 0;
+        if (settings.name == explore)
+          index = 1;
+        else if (settings.name == cart)
+          index = 2;
+        else if (settings.name == favourites)
+          index = 3;
+        else if (settings.name == AppRouter.settings)
+          index = 4;
+        return _authGuardedRoute(MainScreen(initialIndex: index), settings);
       case explorer:
         final category = settings.arguments as String?;
         return _slideRoute(MealExplorerScreen(category: category), settings);
@@ -84,14 +90,23 @@ class AppRouter {
         final args = settings.arguments as Map<String, dynamic>;
         final meals = args['meals'] as List<Map<String, dynamic>>;
         final index = args['index'] as int;
-        return _slideRoute(MealDetailScreen(meals: meals, initialIndex: index), settings);
+        return _slideRoute(
+          MealDetailScreen(meals: meals, initialIndex: index),
+          settings,
+        );
       case ingredientSelection:
         final meal = settings.arguments as Map<String, dynamic>;
         return _fadeRoute(IngredientSelectionScreen(meal: meal), settings);
       case checkout:
         final args = settings.arguments as Map<String, dynamic>?;
         if (args != null && args.containsKey('cartItems')) {
-          return _slideRoute(CheckoutScreen(cartItems: (args['cartItems'] as List).cast<Map<String, dynamic>>()), settings);
+          return _slideRoute(
+            CheckoutScreen(
+              cartItems: (args['cartItems'] as List)
+                  .cast<Map<String, dynamic>>(),
+            ),
+            settings,
+          );
         }
         return _slideRoute(CheckoutScreen(meal: args), settings);
       case orderTracking:
@@ -124,9 +139,6 @@ class AppRouter {
       case notifications:
         return _slideRoute(const NotificationsScreen(), settings);
 
-
-
-
       case analytics:
         return _slideRoute(const AnalyticsScreen(), settings);
       case mealPlan:
@@ -137,7 +149,9 @@ class AppRouter {
   }
 
   static Route<dynamic> _authGuardedRoute(
-      Widget page, RouteSettings routeSettings) {
+    Widget page,
+    RouteSettings routeSettings,
+  ) {
     // Simply return the route. The initial auth check is handled in splash/login.
     // Putting a FutureBuilder here causes the entire route to reset on theme rebuilds.
     return _fadeRoute(page, routeSettings);
@@ -153,13 +167,15 @@ class AppRouter {
         const end = Offset.zero;
         const curve = Curves.easeOutCubic;
 
-        var slideTween = Tween(begin: begin, end: end).chain(
-          CurveTween(curve: curve),
-        );
-        
-        var fadeTween = Tween<double>(begin: 0.0, end: 1.0).chain(
-          CurveTween(curve: Curves.easeIn),
-        );
+        var slideTween = Tween(
+          begin: begin,
+          end: end,
+        ).chain(CurveTween(curve: curve));
+
+        var fadeTween = Tween<double>(
+          begin: 0.0,
+          end: 1.0,
+        ).chain(CurveTween(curve: Curves.easeIn));
 
         return FadeTransition(
           opacity: animation.drive(fadeTween),
@@ -182,17 +198,18 @@ class AppRouter {
           begin: const Offset(1.0, 0.0),
           end: Offset.zero,
         ).chain(CurveTween(curve: Curves.easeInOutCubic));
-        return SlideTransition(
-            position: animation.drive(tween), child: child);
+        return SlideTransition(position: animation.drive(tween), child: child);
       },
       transitionDuration: const Duration(milliseconds: 350),
     );
   }
 
-  static Widget _fadeTransition(BuildContext context,
-      Animation<double> animation,
-      Animation<double> secondaryAnimation,
-      Widget child) {
+  static Widget _fadeTransition(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
     return FadeTransition(opacity: animation, child: child);
   }
 }

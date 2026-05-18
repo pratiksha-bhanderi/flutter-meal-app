@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:meal_app/core/theme/app_styles.dart';
@@ -119,161 +120,195 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         final size = MediaQuery.of(context).size;
         final double screenWidth = size.width;
 
-        return Column(
+        Widget imageBlock = Stack(
           children: [
-            // ─── Immersive Image Area ───
-            Expanded(
-              flex: 55,
-              child: Stack(
-                children: [
-                  // The Full-Bleed Image with Perfected Zoom & Parallax
-                  ClipRRect(
-                    borderRadius: const BorderRadius.only(
-                      bottomLeft: Radius.circular(44),
-                      bottomRight: Radius.circular(44),
-                    ),
-                    child: Transform(
-                      transform: Matrix4.identity()
-                        ..setEntry(3, 2, 0.001)
-                        ..translate(parallax * 0.5, 0.0, 0.0)
-                        ..scale(1.0 + (value.abs() * 0.15), 1.0 + (value.abs() * 0.15), 1.0),
-                      alignment: Alignment.center,
-                      child: Opacity(
-                        opacity: opacity,
-                        child: Image.asset(
-                          data.imagePath,
-                          width: double.infinity,
-                          height: double.infinity,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
+            ClipRRect(
+              borderRadius: context.isDesktop 
+                ? BorderRadius.zero 
+                : const BorderRadius.only(
+                  bottomLeft: Radius.circular(44),
+                  bottomRight: Radius.circular(44),
+                ),
+              child: Transform(
+                transform: Matrix4.identity()
+                  ..setEntry(3, 2, 0.001)
+                  ..translate(parallax * 0.5, 0.0, 0.0)
+                  ..scale(1.0 + (value.abs() * 0.15), 1.0 + (value.abs() * 0.15), 1.0),
+                alignment: Alignment.center,
+                child: Opacity(
+                  opacity: opacity,
+                  child: Image.asset(
+                    data.imagePath,
+                    width: double.infinity,
+                    height: double.infinity,
+                    fit: BoxFit.cover,
                   ),
-                  
-                  // Soft dark overlay at the top for status bar readability
-                  Positioned.fill(
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.center,
-                          colors: [
-                            Colors.black.withValues(alpha: 0.3),
-                            Colors.transparent,
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
-
-            Expanded(
-              flex: 45,
-              child: Container(
-                width: double.infinity,
-                color: cs.surface,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: screenWidth * 0.08,
-                    vertical: screenWidth * 0.1,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Opacity(
-                        opacity: opacity,
-                        child: Transform.translate(
-                          offset: Offset(parallax * 0.5, 0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                data.title,
-                                style: AppTextStyles.font(context, 
-                                  fontSize: screenWidth * 0.08,
-                                  fontWeight: FontWeight.w800,
-                                  color: cs.onSurface,
-                                  height: 1.1,
-                                ),
-                              ),
-                              SizedBox(height: screenWidth * 0.04),
-                              Text(
-                                data.subtitle,
-                                style: AppTextStyles.font(context, 
-                                  fontSize: screenWidth * 0.04,
-                                  color: cs.onSurface.withValues(alpha: 0.55),
-                                  height: 1.5,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      const Spacer(),
-
-                      Row(
-                        children: [
-                          Row(
-                            children: List.generate(_PageData.pages.length, (i) {
-                              final active = i == _currentPage;
-                                return AnimatedContainer(
-                                  duration: const Duration(milliseconds: 350),
-                                  margin: EdgeInsets.only(right: context.w(6)),
-                                  width: active ? context.w(28) : context.w(8),
-                                  height: context.h(8),
-                                  decoration: BoxDecoration(
-                                  color: active ? cs.primary : cs.onSurface.withValues(alpha: 0.12),
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                              );
-                            }),
-                          ),
-                          const Spacer(),
-                          GestureDetector(
-                            onTap: _next,
-                            child: AnimatedContainer(
-                              duration: const Duration(milliseconds: 350),
-                              height: screenWidth * 0.15,
-                              width: _currentPage == _PageData.pages.length - 1 ? 160 : screenWidth * 0.15,
-                              decoration: BoxDecoration(
-                                color: cs.primary,
-                                borderRadius: BorderRadius.circular(20),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: cs.primary.withValues(alpha: 0.3),
-                                    blurRadius: 15,
-                                    offset: const Offset(0, 8),
-                                  ),
-                                ],
-                              ),
-                              child: Center(
-                                child: _currentPage == _PageData.pages.length - 1
-                                    ? Text(
-                                        'Get Started',
-                                        style: AppTextStyles.font(context, 
-                                          color: Colors.white,
-                                          fontSize: screenWidth * 0.042,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      )
-                                    : Icon(
-                                        Icons.arrow_forward_rounded,
-                                        color: Colors.white,
-                                        size: screenWidth * 0.07,
-                                      ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+            // Soft dark overlay
+            Positioned.fill(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: context.isDesktop ? Alignment.centerLeft : Alignment.topCenter,
+                    end: context.isDesktop ? Alignment.centerRight : Alignment.center,
+                    colors: [
+                      context.isDesktop ? Colors.transparent : Colors.black.withValues(alpha: 0.3),
+                      context.isDesktop ? cs.surface : Colors.transparent,
                     ],
                   ),
                 ),
               ),
             ),
           ],
+        );
+
+        Widget textBlock = Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: context.isDesktop ? MainAxisAlignment.center : MainAxisAlignment.spaceBetween,
+          mainAxisSize: context.isDesktop ? MainAxisSize.min : MainAxisSize.max,
+          children: [
+            Opacity(
+              opacity: opacity,
+              child: Transform.translate(
+                offset: Offset(parallax * 0.5, 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      data.title,
+                      style: AppTextStyles.font(context, 
+                        fontSize: context.sp(30),
+                        fontWeight: FontWeight.w800,
+                        color: cs.onSurface,
+                        height: 1.1,
+                      ),
+                    ),
+                    SizedBox(height: context.h(16)),
+                    Text(
+                      data.subtitle,
+                      style: AppTextStyles.font(context, 
+                        fontSize: context.sp(15),
+                        color: cs.onSurface.withValues(alpha: 0.55),
+                        height: 1.5,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height: context.isDesktop ? context.h(64) : context.h(32)),
+            Row(
+              children: [
+                Row(
+                  children: List.generate(_PageData.pages.length, (i) {
+                    final active = i == _currentPage;
+                      return AnimatedContainer(
+                        duration: const Duration(milliseconds: 350),
+                        margin: EdgeInsets.only(right: context.w(6)),
+                        width: active ? context.w(28) : context.w(8),
+                        height: context.h(8),
+                        decoration: BoxDecoration(
+                        color: active ? cs.primary : cs.onSurface.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    );
+                  }),
+                ),
+                const Spacer(),
+                GestureDetector(
+                  onTap: _next,
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 350),
+                    height: context.h(58),
+                    width: _currentPage == _PageData.pages.length - 1 ? context.w(160) : context.w(58),
+                    decoration: BoxDecoration(
+                      color: cs.primary,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: cs.primary.withValues(alpha: 0.3),
+                          blurRadius: 15,
+                          offset: const Offset(0, 8),
+                        ),
+                      ],
+                    ),
+                    child: Center(
+                      child: _currentPage == _PageData.pages.length - 1
+                          ? Text(
+                              'Get Started',
+                              style: AppTextStyles.font(context, 
+                                color: Colors.white,
+                                fontSize: context.sp(16),
+                                fontWeight: FontWeight.w700,
+                              ),
+                            )
+                          : Icon(
+                              Icons.arrow_forward_rounded,
+                              color: Colors.white,
+                              size: context.sp(26),
+                            ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+
+        if (context.isDesktop) {
+          return Row(
+            children: [
+              Expanded(
+                flex: 5,
+                child: imageBlock,
+              ),
+              Expanded(
+                flex: 5,
+                child: Container(
+                  color: cs.surface,
+                  padding: EdgeInsets.symmetric(horizontal: context.w(48), vertical: context.h(48)),
+                  child: Center(
+                    child: textBlock,
+                  ),
+                ),
+              ),
+            ],
+          );
+        }
+
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            final double imageHeight = math.max(250.0, constraints.maxHeight * 0.55);
+            final double remainingHeight = constraints.maxHeight - imageHeight;
+
+            return SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: imageHeight,
+                    child: imageBlock,
+                  ),
+                  Container(
+                    width: double.infinity,
+                    color: cs.surface,
+                    constraints: BoxConstraints(
+                      minHeight: math.max(0.0, remainingHeight),
+                    ),
+                    padding: EdgeInsets.fromLTRB(
+                      context.w(32),
+                      context.h(32),
+                      context.w(32),
+                      context.h(48),
+                    ),
+                    child: textBlock,
+                  ),
+                ],
+              ),
+            );
+          },
         );
       },
     );

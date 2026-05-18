@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:meal_app/core/theme/app_styles.dart';
 import 'package:meal_app/core/utils/responsive_util.dart';
 
@@ -30,7 +29,7 @@ class _AddPaymentMethodScreenState extends State<AddPaymentMethodScreen> {
   void _saveCard() {
     if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
-      
+
       Future.delayed(const Duration(seconds: 1), () {
         if (mounted) {
           setState(() => _isLoading = false);
@@ -101,13 +100,33 @@ class _AddPaymentMethodScreenState extends State<AddPaymentMethodScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Icon(Icons.credit_card_rounded, color: Colors.white.withOpacity(0.8), size: context.sp(32)),
-                        Text('VISA', style: AppTextStyles.font(context, fontSize: 20, fontWeight: FontWeight.w800, color: Colors.white)),
+                        Icon(
+                          Icons.credit_card_rounded,
+                          color: Colors.white.withOpacity(0.8),
+                          size: context.sp(32),
+                        ),
+                        Text(
+                          'VISA',
+                          style: AppTextStyles.font(
+                            context,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w800,
+                            color: Colors.white,
+                          ),
+                        ),
                       ],
                     ),
                     Text(
-                      _numberController.text.isEmpty ? '**** **** **** ****' : _numberController.text,
-                      style: AppTextStyles.font(context, fontSize: 22, fontWeight: FontWeight.w700, color: Colors.white, letterSpacing: 2),
+                      _numberController.text.isEmpty
+                          ? '**** **** **** ****'
+                          : _numberController.text,
+                      style: AppTextStyles.font(
+                        context,
+                        fontSize: 22,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                        letterSpacing: 2,
+                      ),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -115,17 +134,49 @@ class _AddPaymentMethodScreenState extends State<AddPaymentMethodScreen> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('CARD HOLDER', style: AppTextStyles.font(context, fontSize: 10, color: Colors.white60)),
-                            Text(_holderController.text.isEmpty ? 'JOHN DOE' : _holderController.text.toUpperCase(), 
-                                style: AppTextStyles.font(context, fontSize: 14, fontWeight: FontWeight.w600, color: Colors.white)),
+                            Text(
+                              'CARD HOLDER',
+                              style: AppTextStyles.font(
+                                context,
+                                fontSize: 10,
+                                color: Colors.white60,
+                              ),
+                            ),
+                            Text(
+                              _holderController.text.isEmpty
+                                  ? 'JOHN DOE'
+                                  : _holderController.text.toUpperCase(),
+                              style: AppTextStyles.font(
+                                context,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),
+                            ),
                           ],
                         ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('EXPIRES', style: AppTextStyles.font(context, fontSize: 10, color: Colors.white60)),
-                            Text(_expiryController.text.isEmpty ? 'MM/YY' : _expiryController.text, 
-                                style: AppTextStyles.font(context, fontSize: 14, fontWeight: FontWeight.w600, color: Colors.white)),
+                            Text(
+                              'EXPIRES',
+                              style: AppTextStyles.font(
+                                context,
+                                fontSize: 10,
+                                color: Colors.white60,
+                              ),
+                            ),
+                            Text(
+                              _expiryController.text.isEmpty
+                                  ? 'MM/YY'
+                                  : _expiryController.text,
+                              style: AppTextStyles.font(
+                                context,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),
+                            ),
                           ],
                         ),
                       ],
@@ -142,7 +193,8 @@ class _AddPaymentMethodScreenState extends State<AddPaymentMethodScreen> {
                 icon: Icons.person_outline,
                 isDark: isDark,
                 onChanged: (_) => setState(() {}),
-                validator: (value) => value == null || value.isEmpty ? 'Required' : null,
+                validator: (value) =>
+                    value == null || value.isEmpty ? 'Required' : null,
               ),
               SizedBox(height: context.h(20)),
               _buildFieldLabel(context, 'Card Number'),
@@ -154,7 +206,9 @@ class _AddPaymentMethodScreenState extends State<AddPaymentMethodScreen> {
                 isDark: isDark,
                 keyboardType: TextInputType.number,
                 onChanged: (_) => setState(() {}),
-                validator: (value) => value == null || value.length < 16 ? 'Invalid card number' : null,
+                validator: (value) => value == null || value.length < 16
+                    ? 'Invalid card number'
+                    : null,
               ),
               SizedBox(height: context.h(20)),
               Row(
@@ -171,7 +225,10 @@ class _AddPaymentMethodScreenState extends State<AddPaymentMethodScreen> {
                           icon: Icons.calendar_today_rounded,
                           isDark: isDark,
                           onChanged: (_) => setState(() {}),
-                          validator: (value) => value == null || !value.contains('/') ? 'Required' : null,
+                          validator: (value) =>
+                              value == null || !value.contains('/')
+                              ? 'Required'
+                              : null,
                         ),
                       ],
                     ),
@@ -189,7 +246,10 @@ class _AddPaymentMethodScreenState extends State<AddPaymentMethodScreen> {
                           icon: Icons.lock_outline_rounded,
                           isDark: isDark,
                           keyboardType: TextInputType.number,
-                          validator: (value) => value == null || value.length < 3 ? 'Required' : null,
+                          validator: (value) =>
+                              value == null || value.length < 3
+                              ? 'Required'
+                              : null,
                         ),
                       ],
                     ),
@@ -210,16 +270,16 @@ class _AddPaymentMethodScreenState extends State<AddPaymentMethodScreen> {
                     ),
                     elevation: 0,
                   ),
-                  child: _isLoading 
-                    ? const CircularProgressIndicator(color: Colors.white)
-                    : Text(
-                        'Save Card',
-                        style: AppTextStyles.font(
-                          context,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
+                  child: _isLoading
+                      ? const CircularProgressIndicator(color: Colors.white)
+                      : Text(
+                          'Save Card',
+                          style: AppTextStyles.font(
+                            context,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
-                      ),
                 ),
               ),
             ],
@@ -259,10 +319,18 @@ class _AddPaymentMethodScreenState extends State<AddPaymentMethodScreen> {
       keyboardType: keyboardType,
       validator: validator,
       onChanged: onChanged,
-      style: AppTextStyles.font(context, fontSize: 16, fontWeight: FontWeight.w600),
+      style: AppTextStyles.font(
+        context,
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+      ),
       decoration: InputDecoration(
         hintText: hint,
-        prefixIcon: Icon(icon, color: AppColors.primaryOrange, size: context.sp(20)),
+        prefixIcon: Icon(
+          icon,
+          color: AppColors.primaryOrange,
+          size: context.sp(20),
+        ),
         filled: true,
         fillColor: isDark ? AppColors.darkGrey : Colors.grey[50],
         border: OutlineInputBorder(
@@ -275,7 +343,10 @@ class _AddPaymentMethodScreenState extends State<AddPaymentMethodScreen> {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: AppColors.primaryOrange, width: 1.5),
+          borderSide: const BorderSide(
+            color: AppColors.primaryOrange,
+            width: 1.5,
+          ),
         ),
         contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 18),
       ),

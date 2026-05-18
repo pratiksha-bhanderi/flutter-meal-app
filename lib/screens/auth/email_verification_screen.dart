@@ -35,114 +35,118 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
 
     return Scaffold(
       backgroundColor: cs.surface,
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.all(context.w(24)),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Spacer(),
-              // Illustration or Icon
-              Container(
-                padding: EdgeInsets.all(context.w(32)),
-                decoration: BoxDecoration(
-                  color: cs.primary.withOpacity(0.1),
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  Icons.mark_email_unread_rounded,
-                  size: context.sp(80),
-                  color: cs.primary,
-                ),
-              ),
-              SizedBox(height: context.h(40)),
-              Text(
-                'Verify Your Email 📧',
-                textAlign: TextAlign.center,
-                style: AppTextStyles.font(context, 
-                  fontSize: 28,
-                  fontWeight: FontWeight.w800,
-                  color: cs.onSurface,
-                ),
-              ),
-              SizedBox(height: context.h(16)),
-              RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                  style: AppTextStyles.font(context, 
-                    fontSize: 15,
-                    color: cs.onSurface.withValues(alpha: 0.6),
-                    height: 1.5,
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 450),
+          child: SafeArea(
+            child: Padding(
+              padding: EdgeInsets.all(context.w(24)),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Illustration or Icon
+                  Container(
+                    padding: EdgeInsets.all(context.w(32)),
+                    decoration: BoxDecoration(
+                      color: cs.primary.withOpacity(0.1),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.mark_email_unread_rounded,
+                      size: context.sp(80),
+                      color: cs.primary,
+                    ),
                   ),
-                  children: [
-                    const TextSpan(text: 'We\'ve sent a verification link to\n'),
-                    TextSpan(
-                      text: widget.email,
+                  SizedBox(height: context.h(40)),
+                  Text(
+                    'Verify Your Email 📧',
+                    textAlign: TextAlign.center,
+                    style: AppTextStyles.font(context, 
+                      fontSize: 28,
+                      fontWeight: FontWeight.w800,
+                      color: cs.onSurface,
+                    ),
+                  ),
+                  SizedBox(height: context.h(16)),
+                  RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
                       style: AppTextStyles.font(context, 
                         fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        color: cs.onSurface,
+                        color: cs.onSurface.withValues(alpha: 0.6),
+                        height: 1.5,
+                      ),
+                      children: [
+                        const TextSpan(text: 'We\'ve sent a verification link to\n'),
+                        TextSpan(
+                          text: widget.email,
+                          style: AppTextStyles.font(context, 
+                            fontSize: 15,
+                            fontWeight: FontWeight.w700,
+                            color: cs.onSurface,
+                          ),
+                        ),
+                        const TextSpan(text: '.\nPlease check your inbox and click the link to continue.'),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: context.h(40)),
+                  // Resend Button
+                  TextButton(
+                    onPressed: _isResending ? null : _resendEmail,
+                    child: _isResending 
+                      ? SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(strokeWidth: 2, color: cs.primary),
+                        )
+                      : Text(
+                          'Didn\'t receive the email? Resend',
+                          style: AppTextStyles.font(context, 
+                            color: cs.primary,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 14,
+                          ),
+                        ),
+                  ),
+                  SizedBox(height: context.h(16)),
+                  // Continue Button (Simulating that user verified)
+                  SizedBox(
+                    width: double.infinity,
+                    height: context.h(56),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pushReplacementNamed(AppRouter.home);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: cs.primary,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                        elevation: 0,
+                      ),
+                      child: Text(
+                        'I\'ve Verified My Email',
+                        style: AppTextStyles.font(context, 
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
-                    const TextSpan(text: '.\nPlease check your inbox and click the link to continue.'),
-                  ],
-                ),
-              ),
-              const Spacer(),
-              // Resend Button
-              TextButton(
-                onPressed: _isResending ? null : _resendEmail,
-                child: _isResending 
-                  ? SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(strokeWidth: 2, color: cs.primary),
-                    )
-                  : Text(
-                      'Didn\'t receive the email? Resend',
+                  ),
+                  SizedBox(height: context.h(12)),
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pushReplacementNamed(AppRouter.login),
+                    child: Text(
+                      'Back to Login',
                       style: AppTextStyles.font(context, 
-                        color: cs.primary,
-                        fontWeight: FontWeight.w700,
+                        color: cs.onSurface.withValues(alpha: 0.5),
                         fontSize: 14,
                       ),
                     ),
-              ),
-              SizedBox(height: context.h(16)),
-              // Continue Button (Simulating that user verified)
-              SizedBox(
-                width: double.infinity,
-                height: context.h(56),
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pushReplacementNamed(AppRouter.home);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: cs.primary,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                    elevation: 0,
                   ),
-                  child: Text(
-                    'I\'ve Verified My Email',
-                    style: AppTextStyles.font(context, 
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
+                ],
               ),
-              SizedBox(height: context.h(12)),
-              TextButton(
-                onPressed: () => Navigator.of(context).pushReplacementNamed(AppRouter.login),
-                child: Text(
-                  'Back to Login',
-                  style: AppTextStyles.font(context, 
-                    color: cs.onSurface.withValues(alpha: 0.5),
-                    fontSize: 14,
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),

@@ -72,62 +72,65 @@ class _LoginScreenState extends State<LoginScreen>
         backgroundColor: cs.surface,
         body: SafeArea(
           child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.075),
-            child: FadeTransition(
-              opacity: _fadeAnim,
-              child: SlideTransition(
-                position: _slideAnim,
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: size.height * 0.08),
-
-                      // Logo icon
-                      Center(
-                        child: Container(
-                          width: screenWidth * 0.2,
-                          height: screenWidth * 0.2,
-                          constraints: const BoxConstraints(maxWidth: 100, maxHeight: 100),
-                          decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              colors: [AppColors.primaryOrange, AppColors.secondaryOrange],
-                            ),
-                            borderRadius: BorderRadius.circular(screenWidth * 0.05),
-                            boxShadow: [
-                              BoxShadow(
-                                color: cs.primary.withValues(alpha: 0.35),
-                                blurRadius: 20,
-                                offset: const Offset(0, 8),
+            padding: EdgeInsets.symmetric(horizontal: context.w(24), vertical: context.h(24)),
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 450),
+                child: FadeTransition(
+                  opacity: _fadeAnim,
+                  child: SlideTransition(
+                    position: _slideAnim,
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: context.h(40)),
+                          
+                          // Logo icon
+                          Center(
+                            child: Container(
+                              width: context.w(80),
+                              height: context.w(80),
+                              constraints: const BoxConstraints(maxWidth: 100, maxHeight: 100),
+                              decoration: BoxDecoration(
+                                gradient: const LinearGradient(
+                                  colors: [AppColors.primaryOrange, AppColors.secondaryOrange],
+                                ),
+                                borderRadius: BorderRadius.circular(context.w(20)),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: cs.primary.withValues(alpha: 0.35),
+                                    blurRadius: 20,
+                                    offset: const Offset(0, 8),
+                                  ),
+                                ],
                               ),
-                            ],
+                              child: Icon(
+                                Icons.restaurant_menu_rounded,
+                                color: Colors.white,
+                                size: context.sp(40),
+                              ),
+                            ),
                           ),
-                          child: Icon(
-                            Icons.restaurant_menu_rounded,
-                            color: Colors.white,
-                            size: screenWidth * 0.1,
+
+                          SizedBox(height: context.h(36)),
+
+                          Text(
+                            'Welcome Back 😋',
+                            style: AppTextStyles.font(context, 
+                              fontSize: context.sp(30),
+                              fontWeight: FontWeight.w800,
+                              color: cs.onSurface,
+                            ),
                           ),
-                        ),
-                      ),
-
-                      SizedBox(height: size.height * 0.045),
-
-                      Text(
-                        'Welcome Back 😋',
-                        style: AppTextStyles.font(context, 
-                          fontSize: screenWidth * 0.075,
-                          fontWeight: FontWeight.w700,
-                          color: cs.onSurface,
-                        ),
-                      ),
-                      SizedBox(height: context.h(6)),
-                      Text(
-                        'Sign in to continue your delicious journey',
-                        style: AppTextStyles.font(context, 
-                            fontSize: 14,
-                            color: cs.onSurface.withValues(alpha: 0.55)),
-                      ),
+                          SizedBox(height: context.h(6)),
+                          Text(
+                            'Sign in to continue your delicious journey',
+                            style: AppTextStyles.font(context, 
+                                fontSize: context.sp(14),
+                                color: cs.onSurface.withValues(alpha: 0.55)),
+                          ),
 
                       SizedBox(height: context.h(40)),
 
@@ -312,6 +315,8 @@ class _LoginScreenState extends State<LoginScreen>
               ),
             ),
           ),
+        ),
+      ),
         ),
       ),
     );

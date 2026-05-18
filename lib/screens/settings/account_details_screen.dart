@@ -89,69 +89,74 @@ class _AccountDetailsScreenState extends State<AccountDetailsScreen> {
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
-              padding: EdgeInsets.all(context.w(24)),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildFieldLabel(context, 'Full Name'),
-                    _buildTextField(
-                      context: context,
-                      controller: _nameController,
-                      hint: 'Enter your name',
-                      icon: Icons.person_outline,
-                      isDark: isDark,
-                      validator: (value) => value == null || value.isEmpty ? 'Please enter your name' : null,
-                    ),
-                    SizedBox(height: context.h(20)),
-                    _buildFieldLabel(context, 'Email Address'),
-                    _buildTextField(
-                      context: context,
-                      controller: _emailController,
-                      hint: 'Enter your email',
-                      icon: Icons.email_outlined,
-                      isDark: isDark,
-                      enabled: false, // Email usually locked
-                      validator: (value) => value == null || !value.contains('@') ? 'Enter a valid email' : null,
-                    ),
-                    SizedBox(height: context.h(20)),
-                    _buildFieldLabel(context, 'Phone Number'),
-                    _buildTextField(
-                      context: context,
-                      controller: _phoneController,
-                      hint: 'Enter your phone number',
-                      icon: Icons.phone_outlined,
-                      isDark: isDark,
-                      keyboardType: TextInputType.phone,
-                      validator: (value) => value == null || value.length < 10 ? 'Enter a valid phone number' : null,
-                    ),
-                    SizedBox(height: context.h(40)),
-                    SizedBox(
-                      width: double.infinity,
-                      height: context.h(56),
-                      child: ElevatedButton(
-                        onPressed: _saveDetails,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primaryOrange,
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          elevation: 0,
+          : Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 800),
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.all(context.w(24)),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildFieldLabel(context, 'Full Name'),
+                        _buildTextField(
+                          context: context,
+                          controller: _nameController,
+                          hint: 'Enter your name',
+                          icon: Icons.person_outline,
+                          isDark: isDark,
+                          validator: (value) => value == null || value.isEmpty ? 'Please enter your name' : null,
                         ),
-                        child: Text(
-                          'Save Changes',
-                          style: AppTextStyles.font(
-                            context,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w700,
+                        SizedBox(height: context.h(20)),
+                        _buildFieldLabel(context, 'Email Address'),
+                        _buildTextField(
+                          context: context,
+                          controller: _emailController,
+                          hint: 'Enter your email',
+                          icon: Icons.email_outlined,
+                          isDark: isDark,
+                          enabled: false, // Email usually locked
+                          validator: (value) => value == null || !value.contains('@') ? 'Enter a valid email' : null,
+                        ),
+                        SizedBox(height: context.h(20)),
+                        _buildFieldLabel(context, 'Phone Number'),
+                        _buildTextField(
+                          context: context,
+                          controller: _phoneController,
+                          hint: 'Enter your phone number',
+                          icon: Icons.phone_outlined,
+                          isDark: isDark,
+                          keyboardType: TextInputType.phone,
+                          validator: (value) => value == null || value.length < 10 ? 'Enter a valid phone number' : null,
+                        ),
+                        SizedBox(height: context.h(40)),
+                        SizedBox(
+                          width: double.infinity,
+                          height: context.h(56),
+                          child: ElevatedButton(
+                            onPressed: _saveDetails,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.primaryOrange,
+                              foregroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              elevation: 0,
+                            ),
+                            child: Text(
+                              'Save Changes',
+                              style: AppTextStyles.font(
+                                context,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
                           ),
                         ),
-                      ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),

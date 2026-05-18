@@ -10,19 +10,18 @@ void main() {
 
   group('CartProvider', () {
     // ── Helpers ─────────────────────────────────────────────────────────────
-    Map<String, dynamic> _meal({
+    Map<String, dynamic> meal({
       String name = 'Test Pizza',
       String price = '\$10.00',
       String image = 'assets/pizza.png',
-    }) =>
-        {'name': name, 'price': price, 'image': image};
+    }) => {'name': name, 'price': price, 'image': image};
 
     // ── addToCart ────────────────────────────────────────────────────────────
     group('addToCart', () {
       test('adds a new item with quantity 1', () async {
         final provider = CartProvider();
         await Future.delayed(Duration.zero); // wait for _initCart
-        await provider.addToCart(_meal());
+        await provider.addToCart(meal());
 
         expect(provider.items.length, 1);
         expect(provider.items[0]['name'], 'Test Pizza');
@@ -32,8 +31,8 @@ void main() {
       test('increments quantity when same item added twice', () async {
         final provider = CartProvider();
         await Future.delayed(Duration.zero);
-        await provider.addToCart(_meal());
-        await provider.addToCart(_meal());
+        await provider.addToCart(meal());
+        await provider.addToCart(meal());
 
         expect(provider.items.length, 1);
         expect(provider.items[0]['quantity'], 2);
@@ -42,8 +41,8 @@ void main() {
       test('adds two different items separately', () async {
         final provider = CartProvider();
         await Future.delayed(Duration.zero);
-        await provider.addToCart(_meal(name: 'Pizza'));
-        await provider.addToCart(_meal(name: 'Burger', price: '\$12.00'));
+        await provider.addToCart(meal(name: 'Pizza'));
+        await provider.addToCart(meal(name: 'Burger', price: '\$12.00'));
 
         expect(provider.items.length, 2);
       });
@@ -54,7 +53,7 @@ void main() {
       test('increments quantity by 1', () async {
         final provider = CartProvider();
         await Future.delayed(Duration.zero);
-        await provider.addToCart(_meal());
+        await provider.addToCart(meal());
         await provider.updateQuantity(0, 1);
 
         expect(provider.items[0]['quantity'], 2);
@@ -63,7 +62,7 @@ void main() {
       test('decrements quantity by 1', () async {
         final provider = CartProvider();
         await Future.delayed(Duration.zero);
-        await provider.addToCart(_meal());
+        await provider.addToCart(meal());
         await provider.updateQuantity(0, 1); // → qty 2
         await provider.updateQuantity(0, -1); // → qty 1
 
@@ -73,7 +72,7 @@ void main() {
       test('removes item when quantity drops to 0', () async {
         final provider = CartProvider();
         await Future.delayed(Duration.zero);
-        await provider.addToCart(_meal());
+        await provider.addToCart(meal());
         await provider.updateQuantity(0, -1); // qty was 1 → 0 → removed
 
         expect(provider.items.isEmpty, true);
@@ -85,8 +84,8 @@ void main() {
       test('removes item at given index', () async {
         final provider = CartProvider();
         await Future.delayed(Duration.zero);
-        await provider.addToCart(_meal(name: 'Pizza'));
-        await provider.addToCart(_meal(name: 'Burger', price: '\$12.00'));
+        await provider.addToCart(meal(name: 'Pizza'));
+        await provider.addToCart(meal(name: 'Burger', price: '\$12.00'));
         await provider.removeItem(0);
 
         expect(provider.items.length, 1);
@@ -99,8 +98,8 @@ void main() {
       test('empties the cart completely', () async {
         final provider = CartProvider();
         await Future.delayed(Duration.zero);
-        await provider.addToCart(_meal());
-        await provider.addToCart(_meal(name: 'Burger', price: '\$12.00'));
+        await provider.addToCart(meal());
+        await provider.addToCart(meal(name: 'Burger', price: '\$12.00'));
         await provider.clearCart();
 
         expect(provider.items.isEmpty, true);
@@ -112,9 +111,11 @@ void main() {
       test('itemCount sums all quantities', () async {
         final provider = CartProvider();
         await Future.delayed(Duration.zero);
-        await provider.addToCart(_meal(name: 'Pizza'));
-        await provider.addToCart(_meal(name: 'Pizza')); // qty 2
-        await provider.addToCart(_meal(name: 'Burger', price: '\$12.00')); // qty 1
+        await provider.addToCart(meal(name: 'Pizza'));
+        await provider.addToCart(meal(name: 'Pizza')); // qty 2
+        await provider.addToCart(
+          meal(name: 'Burger', price: '\$12.00'),
+        ); // qty 1
 
         expect(provider.itemCount, 3);
       });
@@ -122,8 +123,8 @@ void main() {
       test('subtotal calculates correctly', () async {
         final provider = CartProvider();
         await Future.delayed(Duration.zero);
-        await provider.addToCart(_meal(price: '\$10.00'));
-        await provider.addToCart(_meal(price: '\$10.00')); // qty = 2 → \$20.00
+        await provider.addToCart(meal(price: '\$10.00'));
+        await provider.addToCart(meal(price: '\$10.00')); // qty = 2 → \$20.00
 
         expect(provider.subtotal, closeTo(20.00, 0.01));
       });
@@ -138,7 +139,7 @@ void main() {
       test('deliveryFee is 2.50 when cart has items', () async {
         final provider = CartProvider();
         await Future.delayed(Duration.zero);
-        await provider.addToCart(_meal());
+        await provider.addToCart(meal());
 
         expect(provider.deliveryFee, 2.50);
       });
@@ -146,7 +147,7 @@ void main() {
       test('total equals subtotal + deliveryFee', () async {
         final provider = CartProvider();
         await Future.delayed(Duration.zero);
-        await provider.addToCart(_meal(price: '\$10.00'));
+        await provider.addToCart(meal(price: '\$10.00'));
 
         expect(provider.total, closeTo(12.50, 0.01));
       });
@@ -164,8 +165,8 @@ void main() {
       test('returns correct quantity for existing item', () async {
         final provider = CartProvider();
         await Future.delayed(Duration.zero);
-        await provider.addToCart(_meal(name: 'Pizza'));
-        await provider.addToCart(_meal(name: 'Pizza')); // qty 2
+        await provider.addToCart(meal(name: 'Pizza'));
+        await provider.addToCart(meal(name: 'Pizza')); // qty 2
 
         expect(provider.getItemQuantity('Pizza'), 2);
       });
@@ -182,8 +183,8 @@ void main() {
       test('returns correct index for existing item', () async {
         final provider = CartProvider();
         await Future.delayed(Duration.zero);
-        await provider.addToCart(_meal(name: 'Burger', price: '\$12.00'));
-        await provider.addToCart(_meal(name: 'Pizza'));
+        await provider.addToCart(meal(name: 'Burger', price: '\$12.00'));
+        await provider.addToCart(meal(name: 'Pizza'));
 
         expect(provider.getItemIndex('Pizza'), 1);
       });

@@ -5,9 +5,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:meal_app/main.dart' as app;
 import 'package:meal_app/core/services/auth_service.dart';
 import 'package:meal_app/core/widgets/meal_card.dart' as app_meal_card;
-import 'package:meal_app/core/providers/cart_provider.dart';
-import 'package:meal_app/core/providers/theme_provider.dart';
-import 'package:provider/provider.dart';
 
 /// MEALMATE PERFECT MASTER JOURNEY
 /// A comprehensive tour of every major feature and screen.
@@ -16,7 +13,7 @@ void main() {
 
   Future<void> slowStep(WidgetTester tester, String message) async {
     print('STEP: $message');
-    await tester.pump(const Duration(seconds: 3)); 
+    await tester.pump(const Duration(seconds: 3));
   }
 
   group('MealMate Perfect Master Journey', () {
@@ -76,7 +73,7 @@ void main() {
       // Scroll back up to see the search bar
       await tester.drag(scrollFinder, const Offset(0, 300));
       await tester.pumpAndSettle();
-      
+
       final searchBar = find.textContaining('Search your favorite');
       await tester.ensureVisible(searchBar);
       await tester.tap(searchBar);
@@ -117,7 +114,7 @@ void main() {
 
       await tester.tap(find.text('Pepperoni'));
       await slowStep(tester, 'Adding Extra Pepperoni');
-      
+
       await tester.tap(find.text('Done'));
       await slowStep(tester, 'Customization Finished');
 
@@ -164,9 +161,11 @@ void main() {
       final darkModeSwitch = find.byType(Switch).first;
       await tester.tap(darkModeSwitch);
       await slowStep(tester, 'Switching Theme Mode');
-      await tester.pump(const Duration(seconds: 3)); // Wait for theme transition
+      await tester.pump(
+        const Duration(seconds: 3),
+      ); // Wait for theme transition
 
-      // Go to Profile 
+      // Go to Profile
       await tester.tap(find.text('Account'));
       await slowStep(tester, 'Entering Profile Screen');
 
@@ -194,18 +193,23 @@ void main() {
       await tester.tap(pushSwitch);
       await slowStep(tester, 'Toggling Push Notifications');
 
-      final faceIdSwitch = find.byType(Switch).at(2); // Face ID is the 3rd switch on this screen
+      final faceIdSwitch = find
+          .byType(Switch)
+          .at(2); // Face ID is the 3rd switch on this screen
       await tester.ensureVisible(faceIdSwitch);
       await tester.tap(faceIdSwitch);
       await slowStep(tester, 'Toggling Biometric Security');
 
       // Manual scroll to find Logout
-      await tester.drag(find.byType(SingleChildScrollView), const Offset(0, -600));
+      await tester.drag(
+        find.byType(SingleChildScrollView),
+        const Offset(0, -600),
+      );
       await tester.pump(const Duration(seconds: 1));
-      
+
       await tester.tap(find.text('Log Out'));
       await slowStep(tester, 'Logging Out of MealMate');
-      
+
       expect(find.textContaining('Welcome Back'), findsOneWidget);
       print('--- PERFECT MASTER TOUR COMPLETED ---');
     });

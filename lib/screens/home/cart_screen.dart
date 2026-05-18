@@ -49,43 +49,73 @@ class _CartScreenState extends State<CartScreen> {
             },
           ) : null,
           automaticallyImplyLeading: false,
-          title: Text(
+          title: !context.isDesktop ? Text(
             'Cart',
             style: AppTextStyles.font(
               context,
               fontSize: 24,
               fontWeight: FontWeight.w700,
             ),
-          ),
-          toolbarHeight: context.h(80),
+          ) : null,
+          toolbarHeight: context.isDesktop ? 0 : context.h(80),
         ),
         body: cart.items.isEmpty
             ? _buildEmptyState(context, isDark)
             : SafeArea(
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: ListView.builder(
-                        physics: const BouncingScrollPhysics(),
-                        padding: EdgeInsets.symmetric(
-                          horizontal: context.w(24),
-                          vertical: context.h(10),
-                        ),
-                        itemCount: cart.items.length,
-                        itemBuilder: (context, index) {
-                          final item = cart.items[index];
-                          return _buildCartItem(
-                            context,
-                            cart,
-                            item,
-                            index,
-                            isDark,
-                          );
-                        },
-                      ),
-                    ),
-                    _buildSummarySection(context, cart, isDark),
-                  ],
+                child: Container(
+                  width: double.infinity,
+                  alignment: Alignment.topCenter,
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: context.isDesktop ? 1200 : 800),
+                    child: context.isDesktop
+                        ? Padding(
+                            padding: EdgeInsets.all(context.w(24)),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(bottom: context.h(32)),
+                                  child: Text(
+                                    'Cart',
+                                    style: AppTextStyles.font(
+                                      context,
+                                      fontSize: 32,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      // Left Side: Cart Items
+                                      Expanded(
+                                        flex: 3,
+                                        child: _buildCartList(context, cart, isDark),
+                                      ),
+                                      SizedBox(width: context.w(32)),
+                                      // Right Side: Billing Summary
+                                      Expanded(
+                                        flex: 2,
+                                        child: SingleChildScrollView(
+                                          child: _buildSummarySection(context, cart, isDark, isDesktop: true),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        : Column(
+                            children: [
+                              Expanded(
+                                child: _buildCartList(context, cart, isDark),
+                              ),
+                              _buildSummarySection(context, cart, isDark, isDesktop: false),
+                            ],
+                          ),
+                  ),
                 ),
               ),
       ),
@@ -298,6 +328,28 @@ class _CartScreenState extends State<CartScreen> {
   );
 }
 
+  Widget _buildCartList(BuildContext context, CartProvider cart, bool isDark) {
+    return ListView.builder(
+      physics: const BouncingScrollPhysics(),
+      shrinkWrap: context.isDesktop,
+      padding: EdgeInsets.symmetric(
+        horizontal: context.isDesktop ? 0 : context.w(24),
+        vertical: context.h(10),
+      ),
+      itemCount: cart.items.length,
+      itemBuilder: (context, index) {
+        final item = cart.items[index];
+        return _buildCartItem(
+          context,
+          cart,
+          item,
+          index,
+          isDark,
+        );
+      },
+    );
+  }
+
   Widget _quantityBtn(BuildContext context, IconData icon, VoidCallback onTap) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
@@ -313,20 +365,22 @@ class _CartScreenState extends State<CartScreen> {
   Widget _buildSummarySection(
     BuildContext context,
     CartProvider cart,
-    bool isDark,
-  ) {
+    bool isDark, {
+    required bool isDesktop,
+  }) {
     return Container(
       padding: EdgeInsets.all(context.w(24)),
       decoration: BoxDecoration(
         color: isDark ? AppColors.darkGrey : Colors.white,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
+        borderRadius: BorderRadius.circular(isDesktop ? 24 : 30),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
-            offset: const Offset(0, -5),
+            offset: Offset(0, isDesktop ? 4 : -5),
           ),
         ],
+        border: isDesktop ? Border.all(color: Colors.grey.withValues(alpha: 0.1)) : null,
       ),
       child: Column(
         children: [

@@ -27,15 +27,20 @@ class OffersScreen extends StatelessWidget {
         title: Text('Offers & Promo Codes', style: AppTextStyles.font(context, fontSize: 20, fontWeight: FontWeight.w700)),
         centerTitle: true,
       ),
-      body: ListView(
-        padding: EdgeInsets.all(context.w(24)),
-        children: [
-          _offerCard(context, 'WELCOME50', '50% OFF', 'on your first order', Colors.orange, isDark),
-          SizedBox(height: context.h(16)),
-          _offerCard(context, 'MEALMATE20', '20% OFF', 'on orders above \$30', Colors.blue, isDark),
-          SizedBox(height: context.h(16)),
-          _offerCard(context, 'FREEDEL', 'FREE DELIVERY', 'available for today only', Colors.green, isDark),
-        ],
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 800),
+          child: ListView(
+            padding: EdgeInsets.all(context.w(24)),
+            children: [
+              _offerCard(context, 'WELCOME50', '50% OFF', 'on your first order', Colors.orange, isDark),
+              SizedBox(height: context.h(16)),
+              _offerCard(context, 'MEALMATE20', '20% OFF', 'on orders above \$30', Colors.blue, isDark),
+              SizedBox(height: context.h(16)),
+              _offerCard(context, 'FREEDEL', 'FREE DELIVERY', 'available for today only', Colors.green, isDark),
+            ],
+          ),
+        ),
       ),
     );
   }

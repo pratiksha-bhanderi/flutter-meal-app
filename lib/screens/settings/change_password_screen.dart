@@ -68,76 +68,81 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         ),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(context.w(24)),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildFieldLabel(context, 'Current Password'),
-              _buildPasswordField(
-                context: context,
-                controller: _currentPasswordController,
-                hint: 'Enter current password',
-                isObscure: _isObscureCurrent,
-                onToggle: () => setState(() => _isObscureCurrent = !_isObscureCurrent),
-                isDark: isDark,
-                validator: (value) => value == null || value.isEmpty ? 'Please enter current password' : null,
-              ),
-              SizedBox(height: context.h(20)),
-              _buildFieldLabel(context, 'New Password'),
-              _buildPasswordField(
-                context: context,
-                controller: _newPasswordController,
-                hint: 'Enter new password',
-                isObscure: _isObscureNew,
-                onToggle: () => setState(() => _isObscureNew = !_isObscureNew),
-                isDark: isDark,
-                validator: (value) => value == null || value.length < 6 ? 'Password must be at least 6 characters' : null,
-              ),
-              SizedBox(height: context.h(20)),
-              _buildFieldLabel(context, 'Confirm New Password'),
-              _buildPasswordField(
-                context: context,
-                controller: _confirmPasswordController,
-                hint: 'Confirm new password',
-                isObscure: _isObscureConfirm,
-                onToggle: () => setState(() => _isObscureConfirm = !_isObscureConfirm),
-                isDark: isDark,
-                validator: (value) {
-                  if (value == null || value.isEmpty) return 'Please confirm your password';
-                  if (value != _newPasswordController.text) return 'Passwords do not match';
-                  return null;
-                },
-              ),
-              SizedBox(height: context.h(40)),
-              SizedBox(
-                width: double.infinity,
-                height: context.h(56),
-                child: ElevatedButton(
-                  onPressed: _isLoading ? null : _updatePassword,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primaryOrange,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    elevation: 0,
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 800),
+          child: SingleChildScrollView(
+            padding: EdgeInsets.all(context.w(24)),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildFieldLabel(context, 'Current Password'),
+                  _buildPasswordField(
+                    context: context,
+                    controller: _currentPasswordController,
+                    hint: 'Enter current password',
+                    isObscure: _isObscureCurrent,
+                    onToggle: () => setState(() => _isObscureCurrent = !_isObscureCurrent),
+                    isDark: isDark,
+                    validator: (value) => value == null || value.isEmpty ? 'Please enter current password' : null,
                   ),
-                  child: _isLoading 
-                    ? const CircularProgressIndicator(color: Colors.white)
-                    : Text(
-                        'Update Password',
-                        style: AppTextStyles.font(
-                          context,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
+                  SizedBox(height: context.h(20)),
+                  _buildFieldLabel(context, 'New Password'),
+                  _buildPasswordField(
+                    context: context,
+                    controller: _newPasswordController,
+                    hint: 'Enter new password',
+                    isObscure: _isObscureNew,
+                    onToggle: () => setState(() => _isObscureNew = !_isObscureNew),
+                    isDark: isDark,
+                    validator: (value) => value == null || value.length < 6 ? 'Password must be at least 6 characters' : null,
+                  ),
+                  SizedBox(height: context.h(20)),
+                  _buildFieldLabel(context, 'Confirm New Password'),
+                  _buildPasswordField(
+                    context: context,
+                    controller: _confirmPasswordController,
+                    hint: 'Confirm new password',
+                    isObscure: _isObscureConfirm,
+                    onToggle: () => setState(() => _isObscureConfirm = !_isObscureConfirm),
+                    isDark: isDark,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) return 'Please confirm your password';
+                      if (value != _newPasswordController.text) return 'Passwords do not match';
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: context.h(40)),
+                  SizedBox(
+                    width: double.infinity,
+                    height: context.h(56),
+                    child: ElevatedButton(
+                      onPressed: _isLoading ? null : _updatePassword,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primaryOrange,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
                         ),
+                        elevation: 0,
                       ),
-                ),
+                      child: _isLoading 
+                        ? const CircularProgressIndicator(color: Colors.white)
+                        : Text(
+                            'Update Password',
+                            style: AppTextStyles.font(
+                              context,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),

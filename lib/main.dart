@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -45,6 +46,14 @@ class MealApp extends StatelessWidget {
       themeMode: themeProvider.themeMode,
       initialRoute: AppRouter.splash,
       onGenerateRoute: AppRouter.generateRoute,
+      scrollBehavior: const MaterialScrollBehavior().copyWith(
+        dragDevices: {
+          PointerDeviceKind.mouse,
+          PointerDeviceKind.touch,
+          PointerDeviceKind.stylus,
+          PointerDeviceKind.unknown,
+        },
+      ),
       builder: (context, child) {
         // Globally enforce correct status bar icon brightness for every screen.
         final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -55,6 +64,7 @@ class MealApp extends StatelessWidget {
             : SystemUiOverlayStyle.dark.copyWith(
                 statusBarColor: Colors.transparent,
               );
+
         return AnnotatedRegion<SystemUiOverlayStyle>(
           value: overlayStyle,
           child: child!,

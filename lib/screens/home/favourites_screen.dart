@@ -4,6 +4,7 @@ import 'package:meal_app/core/utils/responsive_util.dart';
 import 'package:provider/provider.dart';
 import 'package:meal_app/core/providers/favourites_provider.dart';
 import 'package:meal_app/router/app_router.dart';
+import 'package:meal_app/core/widgets/meal_card.dart';
 
 
 class FavouritesScreen extends StatelessWidget {
@@ -83,8 +84,14 @@ class FavouritesScreen extends StatelessWidget {
                     ),
                   ),
                 )
-              : ListView.builder(
+              : GridView.builder(
                   padding: EdgeInsets.all(context.w(24)),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: context.isDesktop ? 2 : 1,
+                    crossAxisSpacing: context.w(16),
+                    mainAxisSpacing: context.h(4),
+                    childAspectRatio: context.isDesktop ? 3.5 : 3.0,
+                  ),
                   itemCount: favouriteMeals.length,
                   itemBuilder: (context, index) {
                     final meal = favouriteMeals[index];
@@ -108,7 +115,6 @@ class FavouritesScreen extends StatelessWidget {
         );
       },
       child: Container(
-        margin: EdgeInsets.only(bottom: context.h(20)),
         padding: EdgeInsets.all(context.w(12)),
         decoration: BoxDecoration(
           color: isDark ? AppColors.darkGrey : Colors.white,

@@ -44,15 +44,20 @@ class _AddressesScreenState extends State<AddressesScreen> {
         title: Text('My Addresses', style: AppTextStyles.font(context, fontSize: 20, fontWeight: FontWeight.w700)),
         centerTitle: true,
       ),
-      body: ListView(
-        padding: EdgeInsets.all(context.w(24)),
-        children: [
-          _addressCard(context, 'Home', '123 Gourmet Street, Food City, 56789', Icons.home_rounded, isDark),
-          SizedBox(height: context.h(16)),
-          _addressCard(context, 'Office', '456 Tech Park, Innovation Way, 10101', Icons.work_rounded, isDark),
-          SizedBox(height: context.h(32)),
-          _addButton(context, 'Add New Address'),
-        ],
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 800),
+          child: ListView(
+            padding: EdgeInsets.all(context.w(24)),
+            children: [
+              _addressCard(context, 'Home', '123 Gourmet Street, Food City, 56789', Icons.home_rounded, isDark),
+              SizedBox(height: context.h(16)),
+              _addressCard(context, 'Office', '456 Tech Park, Innovation Way, 10101', Icons.work_rounded, isDark),
+              SizedBox(height: context.h(32)),
+              _addButton(context, 'Add New Address'),
+            ],
+          ),
+        ),
       ),
     );
   }

@@ -127,8 +127,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(context.w(24)),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 800),
+          child: SingleChildScrollView(
+            padding: EdgeInsets.all(context.w(24)),
         child: Column(
           children: [
             // User Profile Header
@@ -295,6 +298,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             SizedBox(height: context.h(20)),
           ],
+            ),
+          ),
         ),
       ),
     );

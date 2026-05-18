@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:meal_app/core/theme/app_styles.dart';
 import 'package:meal_app/core/utils/responsive_util.dart';
 import 'package:meal_app/router/app_router.dart';
-import 'package:meal_app/core/providers/cart_provider.dart';
-import 'package:meal_app/core/providers/favourites_provider.dart';
 import 'package:meal_app/core/widgets/meal_card.dart';
 import 'package:meal_app/core/widgets/junk_food_refresh.dart';
 import 'package:meal_app/core/providers/data_provider.dart';
@@ -56,15 +54,15 @@ class _MealExplorerScreenState extends State<MealExplorerScreen> {
     final filteredMeals = data.meals.where((meal) {
       final matchesCategory =
           _currentCategory == 'All' || meal['category'] == _currentCategory;
-      final matchesSearch = meal['name']
-          .toString()
-          .toLowerCase()
-          .contains(_searchQuery.toLowerCase());
+      final matchesSearch = meal['name'].toString().toLowerCase().contains(
+        _searchQuery.toLowerCase(),
+      );
 
       // Parse price (assuming format "$12.99")
       final priceStr = meal['price'].toString().replaceAll('\$', '');
       final price = double.tryParse(priceStr) ?? 0.0;
-      final matchesPrice = price >= _priceRange.start && price <= _priceRange.end;
+      final matchesPrice =
+          price >= _priceRange.start && price <= _priceRange.end;
 
       // For mock purposes, assume meals with price > 13 are "top rated"
       final isTopRated = price > 13.0;
@@ -73,15 +71,17 @@ class _MealExplorerScreenState extends State<MealExplorerScreen> {
       // Advanced Filters Logic
       final matchesMealType =
           _selectedMeals.isEmpty || _selectedMeals.contains(meal['mealType']);
-      final matchesCourse = _selectedCourses.isEmpty ||
-          _selectedCourses.contains(meal['course']);
+      final matchesCourse =
+          _selectedCourses.isEmpty || _selectedCourses.contains(meal['course']);
 
       final servings = (meal['servings'] as num?)?.toDouble();
-      final matchesServings = servings == null ||
+      final matchesServings =
+          servings == null ||
           (servings >= _servingRange.start && servings <= _servingRange.end);
 
       final prepTime = (meal['prepTime'] as num?)?.toDouble();
-      final matchesPrepTime = prepTime == null ||
+      final matchesPrepTime =
+          prepTime == null ||
           (prepTime >= _prepTimeRange.start && prepTime <= _prepTimeRange.end);
 
       return matchesCategory &&
@@ -229,10 +229,7 @@ class _MealExplorerScreenState extends State<MealExplorerScreen> {
                       onTap: () {
                         Navigator.of(context).pushNamed(
                           AppRouter.mealDetail,
-                          arguments: {
-                            'meals': filteredMeals,
-                            'index': index,
-                          },
+                          arguments: {'meals': filteredMeals, 'index': index},
                         );
                       },
                     );
@@ -246,7 +243,8 @@ class _MealExplorerScreenState extends State<MealExplorerScreen> {
   }
 
   Widget _filterBtn(BuildContext context, ColorScheme cs) {
-    final hasActiveFilters = _priceRange != const RangeValues(0, 50) ||
+    final hasActiveFilters =
+        _priceRange != const RangeValues(0, 50) ||
         _topRatedOnly ||
         _selectedMeals.isNotEmpty ||
         _selectedCourses.isNotEmpty ||
@@ -596,7 +594,9 @@ class _MealExplorerScreenState extends State<MealExplorerScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                isPrice ? '\$${values.start.toInt()}' : '${values.start.toInt()}$unit',
+                isPrice
+                    ? '\$${values.start.toInt()}'
+                    : '${values.start.toInt()}$unit',
                 style: AppTextStyles.font(
                   context,
                   fontSize: 12,
@@ -605,7 +605,9 @@ class _MealExplorerScreenState extends State<MealExplorerScreen> {
                 ),
               ),
               Text(
-                isPrice ? '\$${values.end.toInt()}' : '${values.end.toInt()}$unit',
+                isPrice
+                    ? '\$${values.end.toInt()}'
+                    : '${values.end.toInt()}$unit',
                 style: AppTextStyles.font(
                   context,
                   fontSize: 12,
@@ -683,4 +685,3 @@ class _MealExplorerScreenState extends State<MealExplorerScreen> {
     );
   }
 }
-

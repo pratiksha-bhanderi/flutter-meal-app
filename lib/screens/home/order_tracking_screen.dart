@@ -73,140 +73,145 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
         ),
         centerTitle: true,
       ),
-      body: Column(
-        children: [
-          // Delivery Time Card
-          Padding(
-            padding: EdgeInsets.all(context.w(24)),
-            child: Container(
-              padding: EdgeInsets.all(context.w(20)),
-              decoration: BoxDecoration(
-                color: isDark ? AppColors.darkGrey : Colors.white,
-                borderRadius: BorderRadius.circular(24),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
-                    blurRadius: 15,
-                    offset: const Offset(0, 8),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 800),
+          child: Column(
+            children: [
+              // Delivery Time Card
+              Padding(
+                padding: EdgeInsets.all(context.w(24)),
+                child: Container(
+                  padding: EdgeInsets.all(context.w(20)),
+                  decoration: BoxDecoration(
+                    color: isDark ? AppColors.darkGrey : Colors.white,
+                    borderRadius: BorderRadius.circular(24),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.05),
+                        blurRadius: 15,
+                        offset: const Offset(0, 8),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              child: Row(
-                children: [
-                  Container(
-                    padding: EdgeInsets.all(context.w(12)),
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryOrange.withValues(alpha: 0.1),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.timer_outlined,
-                      color: AppColors.primaryOrange,
-                      size: context.sp(24),
-                    ),
-                  ),
-                  SizedBox(width: context.w(16)),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Row(
                     children: [
-                      Text(
-                        'Estimated Delivery Time',
-                        style: AppTextStyles.font(
-                          context,
-                          fontSize: 13,
-                          color: Colors.grey,
+                      Container(
+                        padding: EdgeInsets.all(context.w(12)),
+                        decoration: BoxDecoration(
+                          color: AppColors.primaryOrange.withValues(alpha: 0.1),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.timer_outlined,
+                          color: AppColors.primaryOrange,
+                          size: context.sp(24),
                         ),
                       ),
-                      Text(
-                        _formatDuration(_remainingTime),
-                        style: AppTextStyles.font(
-                          context,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w800,
-                          color: AppColors.primaryOrange,
+                      SizedBox(width: context.w(16)),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Estimated Delivery Time',
+                            style: AppTextStyles.font(
+                              context,
+                              fontSize: 13,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          Text(
+                            _formatDuration(_remainingTime),
+                            style: AppTextStyles.font(
+                              context,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w800,
+                              color: AppColors.primaryOrange,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              // Map Placeholder
+              Expanded(
+                child: Container(
+                  width: double.infinity,
+                  margin: EdgeInsets.symmetric(horizontal: context.w(24)),
+                  decoration: BoxDecoration(
+                    color: isDark ? AppColors.darkGrey : Colors.grey[200],
+                    borderRadius: BorderRadius.circular(32),
+                    image: const DecorationImage(
+                      image: AssetImage('assets/images/map_placeholder.png'),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  child: Stack(
+                    children: [
+                      // Rider Marker Mockup
+                      Positioned(
+                        top: context.h(100),
+                        left: context.w(150),
+                        child: Column(
+                          children: [
+                            Container(
+                              padding: EdgeInsets.all(context.w(4)),
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black26,
+                                    blurRadius: 10,
+                                  ),
+                                ],
+                              ),
+                              child: CircleAvatar(
+                                radius: 18,
+                                backgroundColor: AppColors.primaryOrange,
+                                child: Icon(
+                                  Icons.delivery_dining_rounded,
+                                  color: Colors.white,
+                                  size: context.sp(20),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(top: 4),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 4,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(
+                                'Rider is on the way',
+                                style: AppTextStyles.font(
+                                  context,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
                   ),
-                ],
-              ),
-            ),
-          ),
-
-          // Map Placeholder
-          Expanded(
-            child: Container(
-              width: double.infinity,
-              margin: EdgeInsets.symmetric(horizontal: context.w(24)),
-              decoration: BoxDecoration(
-                color: isDark ? AppColors.darkGrey : Colors.grey[200],
-                borderRadius: BorderRadius.circular(32),
-                image: const DecorationImage(
-                  image: AssetImage('assets/images/map_placeholder.png'),
-                  fit: BoxFit.cover,
                 ),
               ),
-              child: Stack(
-                children: [
-                  // Rider Marker Mockup
-                  Positioned(
-                    top: context.h(100),
-                    left: context.w(150),
-                    child: Column(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.all(context.w(4)),
-                          decoration: const BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black26,
-                                blurRadius: 10,
-                              ),
-                            ],
-                          ),
-                          child: CircleAvatar(
-                            radius: 18,
-                            backgroundColor: AppColors.primaryOrange,
-                            child: Icon(
-                              Icons.delivery_dining_rounded,
-                              color: Colors.white,
-                              size: context.sp(20),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(top: 4),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Text(
-                            'Rider is on the way',
-                            style: AppTextStyles.font(
-                              context,
-                              fontSize: 10,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
 
-          // Status Stepper
-          _buildStatusStepper(context, isDark),
-        ],
+              // Status Stepper
+              _buildStatusStepper(context, isDark),
+            ],
+          ),
+        ),
       ),
     );
   }

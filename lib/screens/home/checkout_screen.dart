@@ -33,27 +33,92 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       child: Scaffold(
         backgroundColor: cs.surface,
         appBar: _buildAppBar(context, isDark),
-        body: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildSectionTitle(context, 'Order Summary'),
-              _buildOrderList(context, items, isDark),
-              
-              _buildSectionTitle(context, 'Delivery Address'),
-              _buildAddressCard(context, isDark),
-              
-              _buildSectionTitle(context, 'Payment Method'),
-              _buildPaymentCard(context, isDark),
-              
-              _buildPriceBreakdown(context, items, isDark),
-              
-              SizedBox(height: context.h(40)),
-            ],
+        body: SafeArea(
+          child: Container(
+            width: double.infinity,
+            alignment: Alignment.topCenter,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: context.isDesktop ? 1200 : 800),
+              child: context.isDesktop
+                  ? Padding(
+                      padding: EdgeInsets.all(context.w(24)),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Left side: Details
+                          Expanded(
+                            flex: 3,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                _buildSectionTitle(context, 'Order Summary'),
+                                Expanded(
+                                  child: _buildOrderList(context, items, isDark),
+                                ),
+                                _buildSectionTitle(context, 'Delivery Address'),
+                                _buildAddressCard(context, isDark),
+                                _buildSectionTitle(context, 'Payment Method'),
+                                _buildPaymentCard(context, isDark),
+                                SizedBox(height: context.h(24)),
+                              ],
+                            ),
+                          ),
+                          SizedBox(width: context.w(32)),
+                          // Right side: Price & Action
+                          Expanded(
+                            flex: 2,
+                            child: Container(
+                              padding: EdgeInsets.all(context.w(24)),
+                              decoration: BoxDecoration(
+                                color: isDark ? AppColors.darkGrey : Colors.white,
+                                borderRadius: BorderRadius.circular(24),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withValues(alpha: 0.05),
+                                    blurRadius: 10,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ],
+                                border: Border.all(color: Colors.grey.withValues(alpha: 0.1)),
+                              ),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    'Payment Summary',
+                                    style: AppTextStyles.font(context, fontSize: 20, fontWeight: FontWeight.w800),
+                                  ),
+                                  SizedBox(height: context.h(24)),
+                                  _buildPriceBreakdown(context, items, isDark, isDesktop: true),
+                                  SizedBox(height: context.h(32)),
+                                  _buildPlaceOrderButton(context, items),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildSectionTitle(context, 'Order Summary'),
+                          _buildOrderList(context, items, isDark),
+                          _buildSectionTitle(context, 'Delivery Address'),
+                          _buildAddressCard(context, isDark),
+                          _buildSectionTitle(context, 'Payment Method'),
+                          _buildPaymentCard(context, isDark),
+                          _buildPriceBreakdown(context, items, isDark, isDesktop: false),
+                          SizedBox(height: context.h(40)),
+                        ],
+                      ),
+                    ),
+            ),
           ),
         ),
-        bottomNavigationBar: _buildBottomBar(context, items),
+        bottomNavigationBar: !context.isDesktop ? _buildBottomBar(context, items) : null,
       ),
     );
   }
@@ -101,93 +166,115 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   }
 
   Widget _buildOrderList(BuildContext context, List<Map<String, dynamic>> items, bool isDark) {
+    if (context.isDesktop) {
+      return Scrollbar(
+        thumbVisibility: true,
+        child: ListView.builder(
+          padding: EdgeInsets.symmetric(horizontal: context.w(24)),
+          itemCount: items.length,
+          itemBuilder: (context, index) {
+            final item = items[index];
+            return _buildOrderItem(context, item, isDark, index, items);
+          },
+        ),
+      );
+    }
+
     return SizedBox(
-      height: context.h(120),
+      height: context.h(140),
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
+        physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
         padding: EdgeInsets.symmetric(horizontal: context.w(24)),
         itemCount: items.length,
         itemBuilder: (context, index) {
           final item = items[index];
-          return GestureDetector(
-            onTap: () {
-              Navigator.of(context).pushNamed(
-                AppRouter.mealDetail,
-                arguments: {
-                  'meals': items,
-                  'index': index,
-                },
-              );
-            },
-            child: Container(
-              width: context.w(280),
-              margin: EdgeInsets.only(right: context.w(16)),
-              padding: EdgeInsets.all(context.w(12)),
-              decoration: BoxDecoration(
-                color: isDark ? AppColors.darkGrey : Colors.white,
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
+          return _buildOrderItem(context, item, isDark, index, items, isHorizontal: true);
+        },
+      ),
+    );
+  }
+
+  Widget _buildOrderItem(BuildContext context, Map<String, dynamic> item, bool isDark, int index, List<Map<String, dynamic>> items, {bool isHorizontal = false}) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).pushNamed(
+          AppRouter.mealDetail,
+          arguments: {
+            'meals': items,
+            'index': index,
+          },
+        );
+      },
+      child: Container(
+        width: isHorizontal ? context.w(280) : double.infinity,
+        margin: EdgeInsets.only(
+          right: isHorizontal ? context.w(16) : 0,
+          bottom: isHorizontal ? 0 : context.h(16),
+        ),
+        padding: EdgeInsets.all(context.w(12)),
+        decoration: BoxDecoration(
+          color: isDark ? AppColors.darkGrey : Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.05),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.asset(
+                item['image']!,
+                width: context.w(80),
+                height: context.h(80),
+                fit: BoxFit.cover,
               ),
-              child: Row(
+            ),
+            SizedBox(width: context.w(16)),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: Image.asset(
-                      item['image']!,
-                      width: context.w(80),
-                      height: context.h(80),
-                      fit: BoxFit.cover,
+                  Text(
+                    item['name']!,
+                    style: AppTextStyles.font(
+                      context,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  SizedBox(height: context.h(4)),
+                  Text(
+                    item['category'] ?? 'Main Course',
+                    style: AppTextStyles.font(
+                      context,
+                      fontSize: 12,
+                      color: Colors.grey,
                     ),
                   ),
-                  SizedBox(width: context.w(16)),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          item['name']!,
-                          style: AppTextStyles.font(
-                            context,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w700,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        SizedBox(height: context.h(4)),
-                        Text(
-                          item['category'] ?? 'Main Course',
-                          style: AppTextStyles.font(
-                            context,
-                            fontSize: 12,
-                            color: Colors.grey,
-                          ),
-                        ),
-                        SizedBox(height: context.h(8)),
-                        Text(
-                          item['price'] ?? '\$12.99',
-                          style: AppTextStyles.font(
-                            context,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w800,
-                            color: AppColors.primaryOrange,
-                          ),
-                        ),
-                      ],
+                  SizedBox(height: context.h(8)),
+                  Text(
+                    item['price'] ?? '\$12.99',
+                    style: AppTextStyles.font(
+                      context,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w800,
+                      color: AppColors.primaryOrange,
                     ),
                   ),
                 ],
               ),
             ),
-          );
-        },
+          ],
+        ),
       ),
     );
   }
@@ -354,20 +441,32 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     );
   }
 
-  Widget _buildPriceBreakdown(BuildContext context, List<Map<String, dynamic>> items, bool isDark) {
+  Widget _buildPriceBreakdown(BuildContext context, List<Map<String, dynamic>> items, bool isDark, {required bool isDesktop}) {
     // Basic calculation logic
     double subtotal = 0;
     for (var item in items) {
       final priceStr = item['price']?.replaceAll('\$', '') ?? '0';
-      subtotal += double.tryParse(priceStr) ?? 0;
+      subtotal += (double.tryParse(priceStr) ?? 0) * (item['quantity'] ?? 1);
     }
     const deliveryFee = 2.50;
     final total = subtotal + deliveryFee;
 
     return Padding(
-      padding: EdgeInsets.fromLTRB(context.w(24), context.h(32), context.w(24), 0),
+      padding: EdgeInsets.fromLTRB(
+        isDesktop ? 0 : context.w(24),
+        isDesktop ? 0 : context.h(32),
+        isDesktop ? 0 : context.w(24),
+        0,
+      ),
       child: Column(
         children: [
+          _buildPriceRow(context, 'Subtotal', '\$${subtotal.toStringAsFixed(2)}'),
+          SizedBox(height: context.h(12)),
+          _buildPriceRow(context, 'Delivery Fee', '\$${deliveryFee.toStringAsFixed(2)}'),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: context.h(16)),
+            child: Divider(color: Colors.grey.withValues(alpha: 0.1)),
+          ),
           _buildPriceRow(
             context,
             'Total Amount',
@@ -375,6 +474,26 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             isTotal: true,
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildPlaceOrderButton(BuildContext context, List<Map<String, dynamic>> items) {
+    return SizedBox(
+      width: double.infinity,
+      height: context.h(56),
+      child: ElevatedButton(
+        onPressed: () => _handlePlaceOrder(context, items),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.primaryOrange,
+          foregroundColor: Colors.white,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          elevation: 0,
+        ),
+        child: Text(
+          'Place Order',
+          style: AppTextStyles.font(context, fontSize: 18, fontWeight: FontWeight.w700),
+        ),
       ),
     );
   }

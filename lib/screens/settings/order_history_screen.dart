@@ -32,13 +32,18 @@ class OrderHistoryScreen extends StatelessWidget {
       ),
       body: orders.isEmpty
           ? _buildEmptyState(context, cs)
-          : ListView.builder(
-              padding: EdgeInsets.all(context.w(20)),
-              itemCount: orders.length,
-              itemBuilder: (context, index) {
-                final order = orders[index];
-                return _buildOrderCard(context, order, cs);
-              },
+          : Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 800),
+                child: ListView.builder(
+                  padding: EdgeInsets.all(context.w(20)),
+                  itemCount: orders.length,
+                  itemBuilder: (context, index) {
+                    final order = orders[index];
+                    return _buildOrderCard(context, order, cs);
+                  },
+                ),
+              ),
             ),
     );
   }
